@@ -45,4 +45,4 @@ jobs:
     - name: Verify
       run: |
         cd el-maven-plugin
-        mvn -B -V -U -C clean verify -Poss-release,ittest
+        mvn -B -V -U -C clean verify -Pittest
