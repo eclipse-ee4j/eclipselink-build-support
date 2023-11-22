@@ -37,7 +37,6 @@ public class Loggers {
     }
 
     public static ProcessOutput none() {
-        NoopStreamProcessor noop = new NoopStreamProcessor();
         return ProcessOutput.silent();
     }
 }

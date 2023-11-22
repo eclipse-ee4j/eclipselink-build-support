@@ -41,7 +41,7 @@ import static org.codehaus.plexus.util.StringUtils.contains;
  * are downloaded if no mongo release is found in <code>~/.embedmongo</code>.
  *
  */
-@Mojo(name="start-mongo", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST)
+@Mojo(name="start-mongo", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = false)
 public class StartMojo extends AbstractEmbeddedMongoMojo {
 
     @Override

@@ -24,7 +24,7 @@ import org.apache.maven.plugins.annotations.Mojo;
  * When invoked, this goal stop an instance of mongo.
  *
  */
-@Mojo(name="stop-mongo", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST)
+@Mojo(name="stop-mongo", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST, threadSafe = false)
 public class StopMojo extends AbstractEmbeddedMongoMojo {
 
     @Override
