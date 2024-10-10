@@ -26,10 +26,11 @@
     <url>https://github.com/eclipse-ee4j/eclipselink-build-support</url>
 
     <properties>
+        <maven.version>3.8.6</maven.version>
         <maven.compiler.release>11</maven.compiler.release>
         <maven.compiler.testRelease>${maven.compiler.release}</maven.compiler.testRelease>
-        <mongodb.version>4.11.0</mongodb.version>
-        <logback.version>1.4.11</logback.version>
+        <mongodb.version>5.2.0</mongodb.version>
+        <logback.version>1.5.9</logback.version>
         <slf4j.version>2.0.9</slf4j.version>
         <junit.version>4.13.2</junit.version>
         <!--test properties-->
@@ -68,7 +69,17 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.12.0</version>
+                    <version>3.13.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.5.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.5.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.eclipse.persistence</groupId>
@@ -79,6 +90,29 @@
         </pluginManagement>
 
         <plugins>
+            <!--Enforce certain Maven version-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[17,)</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>[${maven.version},)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>eclipselink-testbuild-plugin</artifactId>
