@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2023, 2024 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -19,8 +19,7 @@ import de.flapdoodle.embed.mongo.transitions.Mongod;
 import de.flapdoodle.embed.mongo.transitions.RunningMongodProcess;
 import de.flapdoodle.embed.process.config.DownloadConfig;
 import de.flapdoodle.embed.process.io.ProcessOutput;
-import de.flapdoodle.embed.process.net.HttpProxyFactory;
-import de.flapdoodle.embed.process.net.ProxyFactory;
+import de.flapdoodle.net.ProxyFactory;
 import de.flapdoodle.embed.process.transitions.DownloadPackage;
 import de.flapdoodle.reverse.TransitionWalker;
 import de.flapdoodle.reverse.transitions.Start;
@@ -39,10 +38,10 @@ import static org.codehaus.plexus.util.StringUtils.contains;
 /**
  * When invoked, this goal starts an instance of mongo. The required binaries
  * are downloaded if no mongo release is found in <code>~/.embedmongo</code>.
- *
  */
-@Mojo(name="start-mongo", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = false)
+@Mojo(name = "start-mongo", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = false)
 public class StartMojo extends AbstractEmbeddedMongoMojo {
+
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -81,7 +80,7 @@ public class StartMojo extends AbstractEmbeddedMongoMojo {
                 if (proxy.isActive()
                         && equalsIgnoreCase(proxy.getProtocol(), downloadProto)
                         && !contains(proxy.getNonProxyHosts(), downloadHost)) {
-                    return new HttpProxyFactory(proxy.getHost(), proxy.getPort());
+                    return ProxyFactory.of(proxy.getHost(), proxy.getPort());
                 }
             }
         }
