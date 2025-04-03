@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2025 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Public License v. 2.0 which is available at
+    http://www.eclipse.org/legal/epl-2.0,
+    or the Eclipse Distribution License v. 1.0 which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: EPL-2.0 OR BSD-3-Clause
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.eclipse.persistence</groupId>
+    <artifactId>eclipselink-testbuild-plugin-packager-libs-test</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>libs-test</name>
+    <url>https://github.com/eclipse-ee4j/eclipselink-build-support</url>
+
+    <properties>
+        <maven.version>3.8.6</maven.version>
+        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.testRelease>${maven.compiler.release}</maven.compiler.testRelease>
+        <jpa.api.version>3.1.0</jpa.api.version>
+        <eclipselink.version>4.0.5</eclipselink.version>
+        <aspectj.version>1.9.19</aspectj.version>
+        <junit.version>4.13.2</junit.version>
+        <derby.version>10.14.2.0</derby.version>
+
+        <persistence-unit.data-source-name>jdbc/EclipseLinkDS</persistence-unit.data-source-name>
+        <persistence-unit.data-source-type>jta-data-source</persistence-unit.data-source-type>
+        <persistence-unit.transaction-type>JTA</persistence-unit.transaction-type>
+        <persistence-unit.server-weaving>true</persistence-unit.server-weaving>
+        <server.platform>weblogic</server.platform>
+        <db.platform>org.eclipse.persistence.platform.database.oracle.Oracle23Platform</db.platform>
+    </properties>
+
+    <dependencies>
+        <!--API dependencies-->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jpa.api.version}</version>
+        </dependency>
+        <!--EclipseLink-->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>${eclipselink.version}</version>
+        </dependency>
+        <!--EclipseLink Core test framework-->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.core.test.framework</artifactId>
+            <version>${eclipselink.version}</version>
+        </dependency>
+        <!--EclipseLink JPA test framework-->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.test.framework</artifactId>
+            <version>${eclipselink.version}</version>
+        </dependency>
+        <!--Additional libs-->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>${derby.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbytools</artifactId>
+            <version>${derby.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.13.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.5.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.5.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.persistence</groupId>
+                    <artifactId>eclipselink-testbuild-plugin</artifactId>
+                    <version>1.1.2-SNAPSHOT</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>aspectj-maven-plugin</artifactId>
+                    <version>1.15.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.carlspring.maven</groupId>
+                    <artifactId>derby-maven-plugin</artifactId>
+                    <version>1.10</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derby</artifactId>
+                            <version>${derby.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derbyclient</artifactId>
+                            <version>${derby.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derbynet</artifactId>
+                            <version>${derby.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <!--Enforce certain Maven version-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[11,)</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>[${maven.version},)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <db.driver>org.apache.derby.jdbc.ClientDriver</db.driver>
+                        <db.url>jdbc:derby://localhost/memory:eclbuildtests;create=true</db.url>
+                        <db.user>root</db.user>
+                        <db.pwd>root</db.pwd>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <configuration>
+                    <complianceLevel>${maven.compiler.release}</complianceLevel>
+                    <source>${maven.compiler.release}</source>
+                    <target>${maven.compiler.release}</target>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>eclipselink-testbuild-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>package-server-tests</id>
+                        <goals>
+                            <goal>package-testapp</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <mode>EAR</mode>
+                            <finalName>${project.artifactId}.ear</finalName>
+                            <libs>
+                                <lib>org.aspectj:aspectjrt</lib>
+                                <lib>org.aspectj:aspectjweaver</lib>
+                            </libs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.carlspring.maven</groupId>
+                <artifactId>derby-maven-plugin</artifactId>
+                <configuration>
+                    <derbyHome>${basedir}/derby</derbyHome>
+                    <username>root</username>
+                    <password>root</password>
+                    <driver>org.apache.derby.jdbc.ClientDriver</driver>
+                    <connectionURL>jdbc:derby://localhost/memory:eclbuildtests;create=true</connectionURL>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-derby</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-derby</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
