@@ -47,7 +47,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -337,8 +336,8 @@ public final class PackagerMojo extends AbstractMojo {
                 p.addFile(f, "lib/");
                 if (libs != null) {
                     for (String lib : libs) {
-                        StringTokenizer tokenizer = new StringTokenizer(lib, ":");
-                        f = getResolved(tokenizer.nextToken(), tokenizer.nextToken());
+                        String[] coordinates = lib.split(":");
+                        f = getResolved(coordinates[0], coordinates[1]);
                         p.addFile(f, "lib/");
                     }
                 }
