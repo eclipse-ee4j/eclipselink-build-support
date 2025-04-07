@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2022, 2025 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -185,6 +185,12 @@ public final class PackagerMojo extends AbstractMojo {
 
     /**
      * Artifact Ids of project dependencies to be included in the target archive.
+     * It passed there in following form:
+     * {@code
+     * <libs>
+     *    <lib>dependencyGroupId:dependencyArtifactId</lib>
+     * </libs>
+     *                             }
      */
     @Parameter
     private List<String> libs;
@@ -237,7 +243,7 @@ public final class PackagerMojo extends AbstractMojo {
         p.setOutputTimestamp(outputTimestamp);
         p.setConfDir(ejbConf);
         try {
-            File fwk = getResolved("org.eclipse.persistence.jpa.test.framework");
+            File fwk = getResolved("org.eclipse.persistence", "org.eclipse.persistence.jpa.test.framework");
             if (fwk == null) {
                 throw new MojoExecutionException("cannot find dependency on org.eclipse.persistence.jpa.test.framework");
             }
@@ -318,16 +324,23 @@ public final class PackagerMojo extends AbstractMojo {
             p.setOutputTimestamp(outputTimestamp);
             p.setConfDir(earConf);
             try {
-                File f = getResolved("org.eclipse.persistence.core.test.framework");
+                File f = getResolved("org.eclipse.persistence","org.eclipse.persistence.core.test.framework");
                 if (f == null) {
                     throw new MojoExecutionException("cannot find dependency on org.eclipse.persistence.core.test.framework");
                 }
                 p.addFile(f, "lib/");
-                f = getResolved("junit");
+                f = getResolved("junit", "junit");
                 if (f == null) {
                     throw new MojoExecutionException("cannot find dependency on junit");
                 }
                 p.addFile(f, "lib/");
+                if (libs != null) {
+                    for (String lib : libs) {
+                        String[] coordinates = lib.split(":");
+                        f = getResolved(coordinates[0], coordinates[1]);
+                        p.addFile(f, "lib/");
+                    }
+                }
             } catch (ArtifactResolutionException e) {
                 throw new RuntimeException(e);
             }
@@ -349,9 +362,9 @@ public final class PackagerMojo extends AbstractMojo {
         }
     }
 
-    private Dependency getArtifact(String artifactId) {
+    private Dependency getArtifact(String groupId, String artifactId) {
         for (Dependency dependency : project.getDependencies()) {
-            if (dependency.getArtifactId().equals(artifactId)) {
+            if (dependency.getGroupId().equals(groupId) && dependency.getArtifactId().equals(artifactId)) {
                 return dependency;
             }
         }
@@ -389,8 +402,8 @@ public final class PackagerMojo extends AbstractMojo {
         return tests;
     }
 
-    private File getResolved(String artifactId) throws ArtifactResolutionException {
-        Dependency dep = getArtifact(artifactId);
+    private File getResolved(String groupId, String artifactId) throws ArtifactResolutionException {
+        Dependency dep = getArtifact(groupId, artifactId);
         if (dep != null) {
             return DependencyResolver.resolveArtifact(dep, remoteRepos, repoSystem, repoSession).getFile();
         }
