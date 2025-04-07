@@ -32,7 +32,7 @@
         <jpa.api.version>3.1.0</jpa.api.version>
         <eclipselink.version>4.0.5</eclipselink.version>
         <junit.version>4.13.2</junit.version>
-        <derby.version>10.17.1.0</derby.version>
+        <derby.version>10.14.2.0</derby.version>
 
         <persistence-unit.data-source-name>jdbc/EclipseLinkDS</persistence-unit.data-source-name>
         <persistence-unit.data-source-type>jta-data-source</persistence-unit.data-source-type>
